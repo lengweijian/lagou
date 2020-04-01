@@ -1,0 +1,9 @@
+<mapper namespace="mapper.UserMapper">
+	<select id="selectOne" parameterType="pojo.User" resultType="pojo.User">
+		SELECT username,password,birthday FROM user WHERE id = #{id}
+	</select>
+	
+	<select id="selectList" resultType="java.util.List">
+		SELECT * FROM user
+	</select>
+</mapper>
