@@ -69,11 +69,13 @@ public class SimpleExecutor implements Executor {
 
             logger.info("执行sql:" + parsedSql);
             this.resultSet = this.preparedStatement.executeQuery();
-            Class<?> resultType = mappedStatement.getParamterType();
+            Class<?> resultType = mappedStatement.getResultType();
+
             ArrayList<E> results = new ArrayList<>();
             while (resultSet.next()) {
                 ResultSetMetaData metaData = resultSet.getMetaData();
-                E obj = (E) resultType.newInstance();
+
+               E obj = (E)resultType.newInstance();
                 for (int i = 1; i < metaData.getColumnCount(); i++) {
                     // 属性名
                     String columnName = metaData.getColumnName(i);
@@ -85,8 +87,8 @@ public class SimpleExecutor implements Executor {
                     //向类中写入值
                     writeMethod.invoke(obj, value);
                 }
-
                 results.add(obj);
+
             }
             return results;
         } catch (SQLException e) {
@@ -117,6 +119,26 @@ public class SimpleExecutor implements Executor {
 
     @Override
     public void close() {
-
+        if (connection != null){
+            if (preparedStatement != null){
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (resultSet != null){
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -40,9 +40,7 @@ public class XmlMapperBuilder {
             String sql = element.getTextTrim();
             String key = namespace + "." + id;
             mappedStatement.setId(id);
-            if (parameterType != null){
-                mappedStatement.setParamterType(getClassType(parameterType));
-            }
+            mappedStatement.setParamterType(parameterType==null ? null : getClassType(parameterType));
             mappedStatement.setResultType(getClassType(resultType));
             mappedStatement.setSql(sql);
             this.configuration.getMaps().put(key,mappedStatement);

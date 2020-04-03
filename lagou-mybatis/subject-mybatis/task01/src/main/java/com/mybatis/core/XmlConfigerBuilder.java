@@ -32,8 +32,9 @@ public class XmlConfigerBuilder {
 
 		Element rootElement = document.getRootElement();
 
+		// 解析mybatis核心配置文件，封装成configuration对象
 		doConfigurationConfig(rootElement);
-
+		// 解析mapper配置文件，封装成Preparedstatement
 		doMapperConfig(rootElement);
 
 		populateConfiguration();

@@ -34,4 +34,25 @@ public interface SqlSession {
 
 	<T> T getMapper(Class<?> mapperClass);
 
+	/**
+	 * 添加
+	 * @param t
+	 * @param <T>
+	 */
+	<T> void insert(T t);
+
+	/**
+	 * 删除
+	 * @param id
+	 */
+	void delete(Integer id);
+
+	/**
+	 * 修改
+	 * @param id
+	 * @param t
+	 * @param <T>
+	 */
+	<T> void update(Integer id,T t);
+
 }

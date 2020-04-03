@@ -1,9 +1,9 @@
 <mapper namespace="mapper.UserMapper">
 	<select id="selectOne" parameterType="pojo.User" resultType="pojo.User">
-		SELECT username,password,birthday FROM user WHERE id = #{id}
+		SELECT id,username,password,birthday FROM user WHERE id = #{id}
 	</select>
 	
-	<select id="selectList" resultType="java.util.List">
+	<select id="selectList" resultType="pojo.User">
 		SELECT * FROM user
 	</select>
 </mapper>

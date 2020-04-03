@@ -1,5 +1,7 @@
 package com.mybatis.core;
 
+import java.lang.reflect.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,10 +23,7 @@ public class DefaultSqlSession implements SqlSession{
 
     @Override
     public <E> List<E> selectList(String statement, Object... params) {
-
-        MappedStatement mappedStatement = configuration.getMaps().get(statement);
-
-        return executor.query(mappedStatement,configuration,params);
+        return executor.query(configuration.getMaps().get(statement),configuration,params);
     }
 
     @Override
@@ -40,5 +39,51 @@ public class DefaultSqlSession implements SqlSession{
     @Override
     public void close() {
         executor.close();
+    }
+
+    @Override
+    public <T> T getMapper(Class<?> mapperClass) {
+        return (T)Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[]{mapperClass}, (proxy, method, args) -> {
+            // selectOne
+            String targetMethodName = method.getName();
+            if (targetMethodName.contains(MethodType.INSERT.getAction())){
+
+            }else if (targetMethodName.contains(MethodType.DELETE.getAction())){
+
+            }else if (targetMethodName.contains(MethodType.UPDATE.getAction())){
+
+            }else{
+
+            }
+            // className:namespace
+            String className = method.getDeclaringClass().getName();
+            // statementId
+            String key = className+"."+targetMethodName;
+
+            MappedStatement mappedStatement = configuration.getMaps().get(key);
+
+            Type genericReturnType = method.getGenericReturnType();
+
+            ArrayList arrayList = new ArrayList();
+            if (genericReturnType instanceof ParameterizedType){
+                return selectList(key,args);
+            }
+            return selectOne(key,args);
+        });
+    }
+
+    @Override
+    public <T> void insert(T t) {
+
+    }
+
+    @Override
+    public void delete(Integer id) {
+
+    }
+
+    @Override
+    public <T> void update(Integer id, T t) {
+
     }
 }
